@@ -108,6 +108,42 @@ public class UserDAO implements IUserDAO {
         return rowUpdated;
     }
 
+    @Override
+    public void addAndUpdateTransaction() throws SQLException {
+        Connection connection = getConnection();
+        try (
+             PreparedStatement statement1 = connection.prepareStatement("insert into  users (id,name,email,country) value (?,?,?,?)");
+             PreparedStatement statement2 = connection.prepareStatement("insert into  users (id,name,email,country) value (?,?,?,?)");
+             PreparedStatement statement3 = connection.prepareStatement("update users set name = ?, email=?, country=? where id =?");
+        ) {
+            connection.setAutoCommit(false);
+            statement1.setInt(1,7);
+            statement1.setString(2,"Hien");
+            statement1.setString(3,"hien@gmail.com");
+            statement1.setString(4,"Viet Nam");
+            statement1.executeUpdate();
+            statement2.setInt(1,8);
+            statement2.setString(2,"Loi");
+            statement2.setString(3,"mail.com");
+            statement2.setString(4,"Viet Nam");
+            statement2.executeUpdate();
+            statement3.setString(1,"asdsad");
+            statement3.setInt(2,2);
+            statement3.setString(3,"asdsad");
+            statement3.setInt(4,9);
+            statement3.executeUpdate();
+
+
+
+        } catch (SQLException e) {
+            System.out.println("day la rollback");
+            connection.rollback();
+            printSQLException(e);
+        }
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
+
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {

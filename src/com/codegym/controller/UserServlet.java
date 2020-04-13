@@ -61,6 +61,9 @@ public class UserServlet extends HttpServlet {
                 case "delete":
                     deleteUser(request, response);
                     break;
+                case "insertUpdate":
+                    insertUpdate(request,response);
+                    break;
                 default:
                     listUser(request, response);
                     break;
@@ -68,6 +71,10 @@ public class UserServlet extends HttpServlet {
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
+    }
+
+    private void insertUpdate(HttpServletRequest request, HttpServletResponse response)throws SQLException {
+        userDAO.addAndUpdateTransaction();
     }
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
